@@ -1,29 +1,31 @@
+require 'bed'
+
 function love.load()
-    boat = {}
-    boat.x = 1000
-    boat.y = 40
-    boat.speed = -2
-    boat.distance = 0
+  math.randomseed(os.time())
 
-    pole = {}
-    pole.x = 1000
-    pole.y = 50
-    pole.downward_speed = 0
+  collided = false
 
-    dos = {}
-    dos.x = 0
-    dos.y = 40
+  boat = {}
+  boat.x = 800
+  boat.y = 120
+  boat.speed = -0.5
+  boat.distance = 0
 
-    beds = {}
-    beds.speed = -5
+  punt = {}
+  punt.x = 800
+  punt.y = 50
+  punt.height = 50
+  punt.downward_speed = 5
 
-    collided = false
+  dos = {}
+  dos.x = 0
+  dos.y = 40
 
-    -- Assets --
-    images = {}
-    images.boat = love.graphics.newImage("assets/boat.png")
-    images.pole = love.graphics.newImage("assets/pole.png")
-    images.dos = love.graphics.newImage("assets/dos.png")
+  -- Assets --
+  images = {}
+  images.boat = love.graphics.newImage("assets/boat.png")
+  images.punt = love.graphics.newImage("assets/punt.png")
+  images.dos = love.graphics.newImage("assets/dos.png")
 end
 
 function love.update(dt) -- called 60 times per second typically by default
@@ -58,6 +60,16 @@ function love.update(dt) -- called 60 times per second typically by default
     pole.x = pole.x + boat.speed*dt -- pole moves backwards together with the boat
     boat.distance = boat.distance + 5*dt
 
+  boat.distance = boat.distance + 5
+
+  if bed_setup.cycle_pos * bed_setup.width - boat.distance < 1280 then
+    create_bed_block()
+  end
+
+  if #bed > bed_setup.intervals * 2 then
+    table.remove(bed[1])
+  end
+
 end
 
 function love.draw()
@@ -65,16 +77,13 @@ function love.draw()
   love.graphics.draw(images.pole, pole.x, pole.y)
   love.graphics.draw(images.dos, dos.x, dos.y)
 
-end
-
--- Returns a boolean type variable telling whether the end of the pole touches the riverbed
--- Takes two tables as arguments, ie., bed{} and pole{}
-function collide(a, b)
-  if 1 == 0 then
-    lastCollisionTime = os.time()
-    return true
-  else
-    return false
+  for i = 1, #bed, 1 do
+    love.graphics.rectangle('fill', bed[i].cycle_pos * bed[i].width - boat.distance, 720 - bed[i].height, bed[i].width, bed[i].height)
+    if punt.x >= bed[i].cycle_pos * bed[i].width - boat.distance and punt.x >= (bed[i].cycle_pos + 1) * bed[i].width - boat.distance and punt.y + punt.height > 720 - bed[i].height then
+      collided = true
+    else
+      collided = false
+    end
   end
 
 end
