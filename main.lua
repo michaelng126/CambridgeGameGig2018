@@ -28,16 +28,12 @@ function love.update()
   punt.x = punt.x + boat.speed -- punt moves back with boat
   punt.y = punt.y + punt.downward_speed
 
-
 end
 
 function love.draw()
   love.graphics.draw(images.boat, boat.x, boat.y)
   love.graphics.draw(images.punt, punt.x, punt.y)
   love.graphics.draw(images.dos, dos.x, dos.y)
-
-
-
 
 end
 
