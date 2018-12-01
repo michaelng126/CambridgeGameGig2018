@@ -32,15 +32,11 @@ end
 
 function love.update(dt) -- called 60 times per second typically by default
     -- if collision happens, speed up the boat
-    if collided then
-        collided = false
 
-    end
-
-    if (os.time()-lastCollisionTime >= 2) and (os.time()-lastCollisionTime <=5) then
+    if (os.time()-lastCollisionTime >= 1) and (os.time()-lastCollisionTime <=5) then
         boat.speed = 0
     elseif os.time()-lastCollisionTime > 5 then
-            boat.speed = -10
+        boat.speed = -10
     end
 
 
@@ -59,8 +55,8 @@ function love.update(dt) -- called 60 times per second typically by default
     end
 
     -- Update the x positions of both boat and pole
-    boat.x = boat.x + boat.speed*dt
-    pole.x = pole.x + boat.speed*dt -- pole moves backwards together with the boat
+    boat.x = math.min(boat.x + boat.speed*dt, 1200)
+    pole.x = math.min(pole.x + boat.speed*dt, 1200) -- pole moves backwards together with the boat
     boat.distance = boat.distance + 5*dt
 
   boat.distance = boat.distance + 5
@@ -92,6 +88,7 @@ function love.draw()
     if pole.x >= bed[i].cycle_pos * bed[i].width - boat.distance and pole.x >= (bed[i].cycle_pos + 1) * bed[i].width - boat.distance and pole.y + pole.height > 720 - bed[i].height then
       if os.time()-lastCollisionTime >= 1 then
         collided = true
+        boat.speed = 200
         print('Collided')
         boat.speed = 300
         lastCollisionTime = os.time()
