@@ -4,15 +4,16 @@ function love.load()
   math.randomseed(os.time())
 
   boat = {}
-  boat.x = 200
-  boat.y = 40
-  boat.speed = -2
+  boat.x = 800
+  boat.y = 120
+  boat.speed = -0.5
   boat.distance = 0
 
   punt = {}
-  punt.x = 200
+  punt.x = 800
   punt.y = 50
-  punt.downward_speed = 0
+  punt.height = 50
+  punt.downward_speed = 5
 
   dos = {}
   dos.x = 0
@@ -31,6 +32,15 @@ function love.update()
   punt.y = punt.y + punt.downward_speed
 
   boat.distance = boat.distance + 5
+
+  if bed_setup.cycle_pos * bed_setup.width - boat.distance < 1280 then
+    create_bed_block()
+  end
+
+  if #bed > bed_setup.intervals * 2 then
+    table.remove(bed[1])
+  end
+
 end
 
 function love.draw()
@@ -40,6 +50,9 @@ function love.draw()
 
   for i = 1, #bed, 1 do
     love.graphics.rectangle('fill', bed[i].cycle_pos * bed[i].width - boat.distance, 720 - bed[i].height, bed[i].width, bed[i].height)
+    if punt.x >= bed[i].cycle_pos * bed[i].width - boat.distance and punt.x >= (bed[i].cycle_pos + 1) * bed[i].width - boat.distance and punt.y + punt.height > 720 - bed[i].height then
+      -- Collision
+    end
   end
 end
 
