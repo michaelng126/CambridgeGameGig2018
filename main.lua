@@ -1,8 +1,13 @@
+require 'bed'
+
 function love.load()
+  math.randomseed(os.time())
+
   boat = {}
   boat.x = 200
   boat.y = 40
   boat.speed = -2
+  boat.distance = 0
 
   punt = {}
   punt.x = 200
@@ -12,9 +17,6 @@ function love.load()
   dos = {}
   dos.x = 0
   dos.y = 40
-
-  beds = {}
-  beds.speed = -5
 
   -- Assets --
   images = {}
@@ -28,6 +30,7 @@ function love.update()
   punt.x = punt.x + boat.speed -- punt moves back with boat
   punt.y = punt.y + punt.downward_speed
 
+  boat.distance = boat.distance + 5
 end
 
 function love.draw()
@@ -35,6 +38,9 @@ function love.draw()
   love.graphics.draw(images.punt, punt.x, punt.y)
   love.graphics.draw(images.dos, dos.x, dos.y)
 
+  for i = 1, #bed, 1 do
+    love.graphics.rectangle('fill', bed[i].cycle_pos * bed[i].width - boat.distance, 720 - bed[i].height, bed[i].width, bed[i].height)
+  end
 end
 
 function collide(a, b)
