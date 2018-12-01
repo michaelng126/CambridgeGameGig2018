@@ -42,22 +42,22 @@ function love.update(dt) -- called 60 times per second typically by default
     end
  
     
-    -- Update of pole.y 
-    if (love.keyboard.isDown('space') and (collide(bed{}, pole{})==false)) then
-        pole.downward_speed = 5 
-        pole.y = pole.y + pole.downward_speed*dt
-    elseif ((love.keyboard.isDown('space')==false) and pole.y>50) then 
-        pole.downward_speed = -10
-        if pole.y + pole.downward_speed*dt <= 50 then
-            pole.y = 50
+    -- Update of punt.y 
+    if (love.keyboard.isDown('space') and (collide(bed{}, punt{})==false)) then
+        punt.downward_speed = 5 
+        punt.y = punt.y + punt.downward_speed*dt
+    elseif ((love.keyboard.isDown('space')==false) and punt.y>50) then 
+        punt.downward_speed = -10
+        if punt.y + punt.downward_speed*dt <= 50 then
+            punt.y = 50
         else
-            pole.y = pole.y + pole.downward_speed*dt
+            punt.y = punt.y + punt.downward_speed*dt
         end
     end
 
-    -- Update the x positions of both boat and pole
+    -- Update the x positions of both boat and punt
     boat.x = boat.x + boat.speed*dt
-    pole.x = pole.x + boat.speed*dt -- pole moves backwards together with the boat
+    punt.x = punt.x + boat.speed*dt -- punt moves backwards together with the boat
     boat.distance = boat.distance + 5*dt
 
   boat.distance = boat.distance + 5
@@ -74,7 +74,7 @@ end
 
 function love.draw()
   love.graphics.draw(images.boat, boat.x, boat.y)
-  love.graphics.draw(images.pole, pole.x, pole.y)
+  love.graphics.draw(images.punt, punt.x, punt.y)
   love.graphics.draw(images.dos, dos.x, dos.y)
 
   for i = 1, #bed, 1 do
