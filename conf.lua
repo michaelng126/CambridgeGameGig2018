@@ -7,5 +7,5 @@ function love.conf(t)
     t.window.fullscreen = false
     t.window.fullscreentype = "desktop"
 
-    t.version = "11.2"
+    --t.version = "11.2"
 end
