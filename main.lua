@@ -1,6 +1,7 @@
 require 'bed'
 
 function love.load()
+  gameover = false
   lastCollisionTime = 0
   math.randomseed(os.time())
 
@@ -28,30 +29,41 @@ function love.load()
   images.pole = love.graphics.newImage("assets/pole.png")
   images.dos = love.graphics.newImage("assets/dos.png")
   images.sky = love.graphics.newImage("assets/sky.jpeg")
+
+  fonts = {}
+  fonts.score = love.graphics.newFont("assets/Gamer.ttf",36)
+	fonts.teaser = love.graphics.newFont("assets/Gamer.ttf",50)
+	fonts.gameover = love.graphics.newFont("assets/Gamer.ttf", 120)
+	fonts.gm = love.graphics.newFont("assets/Gamer.ttf", 300)
 end
 
 function love.update(dt) -- called 60 times per second typically by default
     -- if collision happens, speed up the boat
 
-    if (os.time()-lastCollisionTime >= 1) and (os.time()-lastCollisionTime <=5) then
-        boat.speed = 0
-    elseif os.time()-lastCollisionTime > 5 then
-        boat.speed = -10
+    if (os.time()-lastCollisionTime >= 1) then
+        boat.speed = -100
     end
 
+    if boat.x < 50 then
+      gameover = true
+    end
 
     -- Update of pole.y
-    if love.keyboard.isDown('space') and collided == false then
-        pole.downward_speed = 500
-        pole.y = pole.y + pole.downward_speed*dt
-    elseif ((love.keyboard.isDown('space')==false) and pole.y > 50) then
-        pole.downward_speed = -2000
-        if pole.y + pole.downward_speed*dt <= 50 then
-            pole.y = 50
-            pole.downward_speed = 0
-        else
-            pole.y = pole.y + pole.downward_speed*dt
-        end
+    if (os.time()-lastCollisionTime >= 1) then
+      if love.keyboard.isDown('space') then
+          pole.downward_speed = 500
+          pole.y = pole.y + pole.downward_speed*dt
+      end
+    else
+      if pole.y > 50 then
+          pole.downward_speed = -2000
+          if pole.y + pole.downward_speed*dt <= 50 then
+              pole.y = 50
+              pole.downward_speed = 0
+          else
+              pole.y = pole.y + pole.downward_speed*dt
+          end
+      end
     end
 
     -- Update the x positions of both boat and pole
@@ -75,10 +87,13 @@ function love.draw()
   love.graphics.setColor(255,255,255)
   love.graphics.draw(images.sky,0,0)
 
-  love.graphics.setColor(15, 59, 130)
-  love.graphics.rectangle('fill', 0, 200, 1280, 720)
   love.graphics.setColor(255,255,255)
   love.graphics.draw(images.boat, boat.x, boat.y)
+
+  love.graphics.setColor(15, 59, 130)
+  love.graphics.rectangle('fill', 0, 200, 1280, 720)
+
+  love.graphics.setColor(255,255,255)
   love.graphics.draw(images.pole, pole.x, pole.y)
   love.graphics.draw(images.dos, dos.x, dos.y)
 
@@ -89,8 +104,6 @@ function love.draw()
       if os.time()-lastCollisionTime >= 1 then
         collided = true
         boat.speed = 200
-        print('Collided')
-        boat.speed = 300
         lastCollisionTime = os.time()
       end
     else
@@ -98,4 +111,19 @@ function love.draw()
     end
   end
 
+  love.graphics.setFont(fonts.score)
+	love.graphics.print(math.floor(boat.distance / 10), 30, 5)
+
+  if gameover then
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.setFont(fonts.gm)
+		love.graphics.print("GAME OVER", 150, 300)
+	end
+
+end
+
+function love.keypressed(key)
+  if gameover then
+		love.load()
+  end
 end
