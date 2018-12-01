@@ -2,12 +2,9 @@ function love.load()
 
 end
 
-function love.update()
+function love.update(dt)
 
 end
 
 function love.draw()
-
 end
-
-# Haha i@ve added code
