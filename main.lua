@@ -3,6 +3,8 @@ require 'bed'
 function love.load()
   math.randomseed(os.time())
 
+  collided = false
+
   boat = {}
   boat.x = 800
   boat.y = 120
@@ -51,15 +53,9 @@ function love.draw()
   for i = 1, #bed, 1 do
     love.graphics.rectangle('fill', bed[i].cycle_pos * bed[i].width - boat.distance, 720 - bed[i].height, bed[i].width, bed[i].height)
     if punt.x >= bed[i].cycle_pos * bed[i].width - boat.distance and punt.x >= (bed[i].cycle_pos + 1) * bed[i].width - boat.distance and punt.y + punt.height > 720 - bed[i].height then
-      -- Collision
+      collided = true
+    else
+      collided = false
     end
-  end
-end
-
-function collide(a, b)
-  if 1 == 1 then
-    return true
-  else
-    return false
   end
 end
