@@ -27,13 +27,14 @@ function love.load()
   images.boat = love.graphics.newImage("assets/boat.png")
   images.pole = love.graphics.newImage("assets/pole.png")
   images.dos = love.graphics.newImage("assets/dos.png")
+  images.sky = love.graphics.newImage("assets/sky.jpeg")
 end
 
 function love.update(dt) -- called 60 times per second typically by default
     -- if collision happens, speed up the boat
     if collided then
         collided = false
-        boat.speed = 300
+
     end
 
     if (os.time()-lastCollisionTime >= 2) and (os.time()-lastCollisionTime <=5) then
@@ -75,16 +76,24 @@ function love.update(dt) -- called 60 times per second typically by default
 end
 
 function love.draw()
+  love.graphics.setColor(255,255,255)
+  love.graphics.draw(images.sky,0,0)
+
+  love.graphics.setColor(15, 59, 130)
+  love.graphics.rectangle('fill', 0, 200, 1280, 720)
+  love.graphics.setColor(255,255,255)
   love.graphics.draw(images.boat, boat.x, boat.y)
   love.graphics.draw(images.pole, pole.x, pole.y)
   love.graphics.draw(images.dos, dos.x, dos.y)
 
+  love.graphics.setColor(155, 59, 74)
   for i = 1, #bed, 1 do
     love.graphics.rectangle('fill', bed[i].cycle_pos * bed[i].width - boat.distance, 720 - bed[i].height, bed[i].width, bed[i].height)
     if pole.x >= bed[i].cycle_pos * bed[i].width - boat.distance and pole.x >= (bed[i].cycle_pos + 1) * bed[i].width - boat.distance and pole.y + pole.height > 720 - bed[i].height then
       if os.time()-lastCollisionTime >= 1 then
         collided = true
         print('Collided')
+        boat.speed = 300
         lastCollisionTime = os.time()
       end
     else
